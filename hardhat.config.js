@@ -11,7 +11,7 @@ require("hardhat-deploy")
  */
 
 const COINMARKETCAP_API_KEY = process.env.COINMARKETCAP_API_KEY || ""
-const GOERLI_RPC_URL = process.env.GOERLI_RPC_URL || ""
+//const GOERLI_RPC_URL = process.env.GOERLI_RPC_URL || ""
 const PRIVATE_KEY = process.env.PRIVATE_KEY || ""
 const ETHERSCAN_API_KEY = process.env.ETHERSCAN_API_KEY || ""
 
@@ -21,10 +21,10 @@ module.exports = {
         hardhat: {
             chainId: 31337,
             // gasPrice: 130000000000,
-            // forking: { url: process.env.MAINNET_RPC_URL },
+            //forking: { url: process.env.GOERLI_RPC_URL },
         },
         goerli: {
-            url: GOERLI_RPC_URL,
+            url: process.env.GOERLI_RPC_URL,
             accounts: [PRIVATE_KEY],
             chainId: 5,
             blockConfirmations: 1,

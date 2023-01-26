@@ -28,4 +28,11 @@ describe("ERC20 functionality", function () {
             assert.equal(actualValue.toString(), expectedValue.toString())
         })
     })
+    describe("getThisContractBalance function", async function () {
+        it("should check if the functions returns correctly value", async function () {
+            expectedValue = await geneCoin.balanceOf(geneCoin.address)
+            actualValue = await geneCoin.getThisContractBalance()
+            assert.equal(actualValue.toString(), expectedValue.toString())
+        })
+    })
 })

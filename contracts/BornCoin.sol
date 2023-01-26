@@ -4,9 +4,11 @@ pragma solidity ^0.8.0;
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 
 contract BornCoin is ERC20 {
+    address public owner1 = 0xd66E9945a68Ac737cf506d78372A240862C405Bd;
+
     constructor() ERC20("BornCoin", "BRNC") {
         _mint(msg.sender, 1000);
-        _mint(0xd66E9945a68Ac737cf506d78372A240862C405Bd, 1000);
+        _mint(owner1, 1000);
         _mint(address(this), 1000);
     }
 
