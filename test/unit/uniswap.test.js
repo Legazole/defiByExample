@@ -24,11 +24,18 @@ describe("UniswapInterface functionality", function () {
             assert.equal(expectedValue.toString(), actualValue.toString())
         })
         it("createUniswapPair", async function () {
+            const actualValue = await uniswapInterface.createUniswapPair(
+                bornCoin.address,
+                geneCoin.address
+            )
+            console.log(actualValue)
+        })
+        it("addUniswapLiquidity", async function () {
             let amountA = 1000,
                 amountB = 1000
             await bornCoin.approve(uniswapInterface.address, amountA)
             await geneCoin.approve(uniswapInterface.address, amountB)
-            let tx = await uniswapInterface.createUniswapPair(
+            let tx = await uniswapInterface.addUniswapLiquidity(
                 bornCoin.address,
                 geneCoin.address,
                 amountA,
