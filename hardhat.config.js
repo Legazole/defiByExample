@@ -21,7 +21,7 @@ module.exports = {
         hardhat: {
             chainId: 31337,
             // gasPrice: 130000000000,
-            //forking: { url: process.env.GOERLI_RPC_URL },
+            forking: { url: process.env.MAINNET_RPC_URL },
         },
         goerli: {
             url: process.env.GOERLI_RPC_URL,
