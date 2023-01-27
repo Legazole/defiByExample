@@ -4,6 +4,7 @@ pragma solidity ^0.8.0;
 import "@openzeppelin/contracts/interfaces/IERC20.sol";
 import "@uniswap/v2-core/contracts/interfaces/IUniswapV2Factory.sol";
 import "@uniswap/v2-periphery/contracts/interfaces/IUniswapV2Router02.sol";
+import "@uniswap/v2-core/contracts/interfaces/IUniswapV2Pair.sol";
 
 contract UniswapInterface {
     address constant ROUTER = 0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D;
@@ -13,17 +14,23 @@ contract UniswapInterface {
     IUniswapV2Factory uniFactory = IUniswapV2Factory(FACTORY);
     IUniswapV2Router02 uniRouter = IUniswapV2Router02(ROUTER);
 
-    function getPairAddress(
-        address _tokenA,
-        address _tokenB
-    ) public returns (address) {}
-
     function createUniswapPair(
         address _tokenA,
         address _tokenB
     ) public returns (address pair) {
         address addressPair = uniFactory.createPair(_tokenA, _tokenB);
         return addressPair;
+    }
+
+    function checkPairReserves(
+        address _tokenA,
+        address _tokenB
+    ) public returns (uint _reserve0, uint _reserve1) {
+        pairAddress = uniFactory.getPair(_tokenA, _tokenB);
+        IUniswapV2Pair uniPair = IUniswapV2Pair(pairAddress);
+        (uint reserve0, uint reserve1, uint32 blockTimestamp) = uniPair
+            .getReserves();
+        return (reserve0, reserve1);
     }
 
     function addUniswapLiquidity(
@@ -53,11 +60,18 @@ contract UniswapInterface {
         return (amountASent, amountBSent, liquidityTokens);
     }
 
-    function getContractBornCoin(
-        address _bornCoin
+    // Getter functions
+
+    function getContractERC20Balance(
+        address _erc20
     ) public view returns (uint256) {
-        return IERC20(_bornCoin).balanceOf(address(this));
+        return IERC20(_erc20).balanceOf(address(this));
     }
+
+    function getPairAddress(
+        address _tokenA,
+        address _tokenB
+    ) public returns (address) {}
 
     constructor() {}
 }
