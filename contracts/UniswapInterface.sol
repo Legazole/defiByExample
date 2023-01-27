@@ -14,12 +14,13 @@ contract UniswapInterface {
     IUniswapV2Factory uniFactory = IUniswapV2Factory(FACTORY);
     IUniswapV2Router02 uniRouter = IUniswapV2Router02(ROUTER);
 
+    constructor() {}
+
     function createUniswapPair(
         address _tokenA,
         address _tokenB
-    ) public returns (address pair) {
-        address addressPair = uniFactory.createPair(_tokenA, _tokenB);
-        return addressPair;
+    ) public returns (address) {
+        return uniFactory.createPair(_tokenA, _tokenB);
     }
 
     function checkPairReserves(
@@ -71,7 +72,7 @@ contract UniswapInterface {
     function getPairAddress(
         address _tokenA,
         address _tokenB
-    ) public returns (address) {}
-
-    constructor() {}
+    ) public view returns (address) {
+        return uniFactory.getPair(_tokenA, _tokenB);
+    }
 }

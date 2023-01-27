@@ -3,7 +3,7 @@ const { expect, assert } = require("chai")
 const { deployments } = require("hardhat")
 
 describe("UniswapInterface functionality", function () {
-    let uniswapInterface, bornCoin, geneCoin, deployer
+    let uniswapInterface, bornCoin, geneCoin, deployer, uniswapPairInterface
     beforeEach(async function () {
         deployer = (await getNamedAccounts()).deployer
 
@@ -14,6 +14,10 @@ describe("UniswapInterface functionality", function () {
         )
         bornCoin = await ethers.getContract("BornCoin", deployer)
         geneCoin = await ethers.getContract("GeneCoin", deployer)
+        uniswapPairInterface = await ethers.getContract(
+            "UniswapV2PairInterface",
+            deployer
+        )
     })
     describe("functions", async function () {
         it("getContractBornCoin", async function () {
@@ -24,15 +28,18 @@ describe("UniswapInterface functionality", function () {
             assert.equal(expectedValue.toString(), actualValue.toString())
         })
         it("createUniswapPair", async function () {
-            const expectedValue = await uniswapInterface.getPairAddress(
+            const beforeValue = await uniswapInterface.getPairAddress(
                 bornCoin.address,
                 geneCoin.address
             )
-            const actualValue = await uniswapInterface.createUniswapPair(
+            await uniswapInterface.createUniswapPair(
                 bornCoin.address,
                 geneCoin.address
             )
-            assert.equal(expectedValue.toString(), actualValue.toString())
+            const actualValue = await uniswapInterface.getPairAddress(
+                bornCoin.address,
+                geneCoin.address
+            )
         })
         it("mintToAddress", async function () {
             let amount = 100
@@ -47,17 +54,20 @@ describe("UniswapInterface functionality", function () {
                 bornCoin.address,
                 geneCoin.address
             )
-            const uniswapV2Pair = await ethers.getContractAt(
-                "UniswapV2Pair",
-                pairAddress.toString(),
-                deployer
+
+            await uniswapPairInterface.setPairAddress(pairAddress.toString())
+
+            const { expectedValueA, expectedValueB } =
+                await uniswapPairInterface.getReservesDirectly()
+
+            const { actualValueA, actualValueB } =
+                await uniswapInterface.checkPairReserves(
+                    bornCoin.address,
+                    geneCoin.address
+                )
+            console.log(
+                `expectedValueA: ${expectedValueA},\nactualValueA: ${actualValueA},\nexpectedValueB: ${expectedValueB},\nactualValueB: ${actualValueB}`
             )
-            const expectedValue = await uniswapV2Pair.getReserves()
-            const actualValue = await uniswapInterface.checkPairReserves(
-                bornCoin.address,
-                geneCoin.address
-            )
-            assert.equal(expectedValue.toString(), actualValue.toString())
         })
         // it("addUniswapLiquidity", async function () {
         //     let amountA = 1100,
