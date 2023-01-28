@@ -11,6 +11,7 @@ contract UniswapV2PairInterface is UniswapV2Pair {
 
     function setPairAddress(address _pair) external {
         pairAddress = _pair;
+        //initialize pair
     }
 
     function getReservesDirectly()
