@@ -4,14 +4,10 @@ pragma solidity =0.5.16;
 import "@uniswap/v2-core/contracts/UniswapV2Pair.sol";
 
 contract UniswapV2PairInterface is UniswapV2Pair {
-    uint reserveA;
-    uint reserveB;
-
     address pairAddress;
 
     function setPairAddress(address _pair) external {
         pairAddress = _pair;
-        //initialize pair
     }
 
     function getReservesDirectly()

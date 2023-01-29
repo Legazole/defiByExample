@@ -57,7 +57,7 @@ describe("UniswapInterface functionality", function () {
 
             await uniswapPairInterface.setPairAddress(pairAddress.toString())
 
-            const { expectedValueA, expectedValueB } =
+            const [expectedValueA, expectedValueB] =
                 await uniswapPairInterface.getReservesDirectly()
 
             const { actualValueA, actualValueB } =
