@@ -9,7 +9,6 @@ import "@uniswap/v2-core/contracts/interfaces/IUniswapV2Pair.sol";
 contract UniswapInterface {
     address constant ROUTER = 0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D;
     address constant FACTORY = 0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f;
-    address public pairAddress;
 
     IUniswapV2Factory uniFactory = IUniswapV2Factory(FACTORY);
     IUniswapV2Router02 uniRouter = IUniswapV2Router02(ROUTER);
@@ -23,11 +22,20 @@ contract UniswapInterface {
         return uniFactory.createPair(_tokenA, _tokenB);
     }
 
+    function checkTotalSupply(
+        address _tokenA,
+        address _tokenB
+    ) external view returns (uint) {
+        address pairAddress = uniFactory.getPair(_tokenA, _tokenB);
+        IUniswapV2Pair uniPair = IUniswapV2Pair(pairAddress);
+        return uniPair.totalSupply();
+    }
+
     function checkPairReserves(
         address _tokenA,
         address _tokenB
-    ) public returns (uint _reserve0, uint _reserve1) {
-        pairAddress = uniFactory.getPair(_tokenA, _tokenB);
+    ) public view returns (uint _reserve0, uint _reserve1) {
+        address pairAddress = uniFactory.getPair(_tokenA, _tokenB);
         IUniswapV2Pair uniPair = IUniswapV2Pair(pairAddress);
         (uint reserve0, uint reserve1, uint32 blockTimestamp) = uniPair
             .getReserves();

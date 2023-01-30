@@ -60,7 +60,7 @@ describe("UniswapInterface functionality", function () {
             const [expectedValueA, expectedValueB] =
                 await uniswapPairInterface.getReservesDirectly()
 
-            const { actualValueA, actualValueB } =
+            const [actualValueA, actualValueB] =
                 await uniswapInterface.checkPairReserves(
                     bornCoin.address,
                     geneCoin.address
@@ -69,19 +69,46 @@ describe("UniswapInterface functionality", function () {
                 `expectedValueA: ${expectedValueA},\nactualValueA: ${actualValueA},\nexpectedValueB: ${expectedValueB},\nactualValueB: ${actualValueB}`
             )
         })
-        // it("addUniswapLiquidity", async function () {
-        //     let amountA = 1100,
-        //         amountB = 1100
+        it("checkTotalSupply", async function () {
+            const actualValue = await uniswapInterface.checkTotalSupply(
+                bornCoin.address,
+                geneCoin.address
+            )
+            console.log(`${actualValue.toString()}`)
+        })
+        it("addUniswapLiquidity", async function () {
+            let amountA = 1100,
+                amountB = 1100
 
-        //     await bornCoin.approve(uniswapInterface.address, amountA)
-        //     await geneCoin.approve(uniswapInterface.address, amountB)
-        //     await uniswapInterface.addUniswapLiquidity(
-        //         bornCoin.address,
-        //         geneCoin.address,
-        //         amountA,
-        //         amountB,
-        //         { from: deployer }
-        //     )
-        // })
+            const pairAddress = await uniswapInterface.getPairAddress(
+                bornCoin.address,
+                geneCoin.address
+            )
+
+            await uniswapPairInterface.setPairAddress(pairAddress.toString())
+
+            const totalSupplyBefore =
+                await uniswapPairInterface.checkTotalSupply()
+            console.log(
+                `Total supply before adding liquidity: ${totalSupplyBefore.toString()}`
+            )
+
+            await bornCoin.approve(uniswapInterface.address, amountA)
+            await geneCoin.approve(uniswapInterface.address, amountB)
+
+            console.log("===== adding liquidity =====")
+            await uniswapInterface.addUniswapLiquidity(
+                bornCoin.address,
+                geneCoin.address,
+                amountA,
+                amountB,
+                { from: deployer }
+            )
+            console.log("Liquidity added.")
+
+            const totalSupplyAfter =
+                await uniswapPairInterface.checkTotalSupply()
+            console.log(`Total supply after: ${totalSupplyAfter.toString()}`)
+        })
     })
 })

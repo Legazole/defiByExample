@@ -20,4 +20,14 @@ contract UniswapV2PairInterface is UniswapV2Pair {
             .getReserves();
         return (reserveA, reserveB);
     }
+
+    function checkTotalSupply() external view returns (uint) {
+        UniswapV2Pair uniswapPair = UniswapV2Pair(pairAddress);
+        return uniswapPair.totalSupply();
+    }
+
+    function checkBalanceOf(address _address) external view returns (uint) {
+        UniswapV2Pair uniswapPair = UniswapV2Pair(pairAddress);
+        return uniswapPair.balanceOf(_address);
+    }
 }
