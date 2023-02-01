@@ -9,7 +9,7 @@ describe("UniswapInterface functionality", function () {
 
         await deployments.fixture["all"]
         uniswapInterface = await ethers.getContract(
-            "UniswapInterface",
+            "UniswapLiquidityInterface",
             deployer
         )
         bornCoin = await ethers.getContract("BornCoin", deployer)
