@@ -13,6 +13,7 @@ contract UniswapSwapInterface {
         0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D;
     IERC20 public geneCoin;
     IERC20 public bornCoin;
+    address public PAIRADDRESS;
 
     IUniswapV2Factory uniFactory = IUniswapV2Factory(FACTORY);
     IUniswapV2Router02 uniRouter = IUniswapV2Router02(ROUTER);
@@ -20,7 +21,10 @@ contract UniswapSwapInterface {
     constructor(address _bornCoin, address _geneCoin) {
         bornCoin = IERC20(_bornCoin);
         geneCoin = IERC20(_geneCoin);
+        PAIRADDRESS = uniFactory.getPair(address(bornCoin), address(geneCoin));
     }
+
+    IUniswapV2Pair uniPair = IUniswapV2Pair(PAIRADDRESS);
 
     function swapTokens(uint _amountIn, uint _amountOut) external {
         //This function should swap tokens from a given address for a given amount
@@ -52,6 +56,10 @@ contract UniswapSwapInterface {
         );
     }
 
+    function createPair() external returns (address) {
+        return uniFactory.createPair(address(bornCoin), address(geneCoin));
+    }
+
     //Getter functions
 
     function getBornCoinAddress() external view returns (address) {
@@ -60,5 +68,15 @@ contract UniswapSwapInterface {
 
     function getGeneCoinAddress() external view returns (address) {
         return address(geneCoin);
+    }
+
+    function getPairReserves()
+        external
+        view
+        returns (uint _reserve0, uint _reserve1)
+    {
+        (uint reserve0, uint reserve1, uint32 blockTimestamp) = uniPair
+            .getReserves();
+        return (reserve0, reserve1);
     }
 }
