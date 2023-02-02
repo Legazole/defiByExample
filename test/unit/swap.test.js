@@ -25,9 +25,39 @@ describe("Uniswap swap interface functionality", function () {
     })
     describe("constructor", async function () {
         it("Should check if BornCoin gets initialized correctly", async function () {
-            expectValue = bornCoin.address
+            expectedValue = bornCoin.address
             actualValue = await swapInterface.getBornCoinAddress()
-            assert.equal(expectValue.toString(), actualValue.toString())
+            assert.equal(expectedValue.toString(), actualValue.toString())
+        })
+        it("Should check if GeneCoin get initialized correctly", async function () {
+            expectedValue = geneCoin.address
+            actualValue = await swapInterface.getGeneCoinAddress()
+            assert.equal(expectedValue.toString(), actualValue.toString())
+        })
+    })
+    describe("functions", async function () {
+        it("swapTokens function", async function () {
+            let amountIn, amountOut
+            amountIn = 10
+            amountOut = 10
+            const balanceGeneCoinBefore = await geneCoin.balanceOf(deployer)
+            console.log(
+                `deployer geneCoin balance before swap ${balanceGeneCoinBefore.toString()}`
+            )
+            const expectedValueIn =
+                parseInt(balanceGeneCoinBefore) + parseInt(amountIn)
+
+            const balanceBorncoinBefore = await bornCoin.balanceOf(deployer)
+            console.log(
+                `deployer bornCoin balance before swap ${balanceBorncoinBefore.toString()}`
+            )
+            const expectedValueOut =
+                parseInt(balanceBorncoinBefore) + parseInt(amountOut)
+
+            console.log(
+                `trying to swap ${amountOut.toString()} bornCoin for ${amountIn.toString()} geneCoin`
+            )[(amount1, amount2, amount3, amount4)] =
+                await swapInterface.swapTokens(amountIn, amountOut)
         })
     })
 })
