@@ -4,15 +4,15 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
     const { deployer } = await getNamedAccounts()
     const { deploy, log } = deployments
 
-    log("deploying UniswapInterface on network")
+    log("deploying Uniswap liquidity Interface on network")
 
-    const uniswapInterface = await deploy("UniswapInterface", {
+    const uniswapInterface = await deploy("UniswapLiquidityInterface", {
         from: deployer,
         log: true,
     })
 
-    log(`uniswapinterface deployed at ${uniswapInterface.address}`)
+    log(`uniswap liquidity interface deployed at ${uniswapInterface.address}`)
     log("------------------------------")
 }
 
-module.exports.tags = ["uniswapinterface", "all"]
+module.exports.tags = ["liquidityinterface", "all"]

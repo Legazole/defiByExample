@@ -51,4 +51,14 @@ contract UniswapSwapInterface {
             block.timestamp
         );
     }
+
+    //Getter functions
+
+    function getBornCoinAddress() external view returns (address) {
+        return address(bornCoin);
+    }
+
+    function getGeneCoinAddress() external view returns (address) {
+        return address(geneCoin);
+    }
 }
