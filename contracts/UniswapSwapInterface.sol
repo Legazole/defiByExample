@@ -17,14 +17,17 @@ contract UniswapSwapInterface {
 
     IUniswapV2Factory uniFactory = IUniswapV2Factory(FACTORY);
     IUniswapV2Router02 uniRouter = IUniswapV2Router02(ROUTER);
+    IUniswapV2Pair uniPair;
 
     constructor(address _bornCoin, address _geneCoin) {
         bornCoin = IERC20(_bornCoin);
         geneCoin = IERC20(_geneCoin);
-        PAIRADDRESS = uniFactory.getPair(address(bornCoin), address(geneCoin));
     }
 
-    IUniswapV2Pair uniPair = IUniswapV2Pair(PAIRADDRESS);
+    function setPairAddress(address _tokenA, address _tokenB) external {
+        PAIRADDRESS = uniFactory.getPair(_tokenA, _tokenB);
+        uniPair = IUniswapV2Pair(PAIRADDRESS);
+    }
 
     function swapTokens(uint _amountIn, uint _amountOut) external {
         //This function should swap tokens from a given address for a given amount
@@ -46,8 +49,11 @@ contract UniswapSwapInterface {
         uint[] memory amounts;
         amounts = new uint[](4);
 
+        bornCoin.transferFrom(msg.sender, address(this), 300);
+        bornCoin.approve(address(uniRouter), 300);
+
         //this fuctions returns an array with the input amounts and subsequent output token amounts
-        amounts = uniRouter.swapTokensForExactTokens(
+        amounts = uniRouter.swapExactTokensForTokens(
             amountOut,
             amountInMax,
             path,

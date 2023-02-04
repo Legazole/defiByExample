@@ -36,10 +36,46 @@ describe("Uniswap swap interface functionality", function () {
         })
     })
     describe("functions", async function () {
+        // beforeEach(async function () {
+        //     let amountA = 1100,
+        //         amountB = 1100
+
+        //     await bornCoin.approve(uniswapInterface.address, amountA)
+        //     await geneCoin.approve(uniswapInterface.address, amountB)
+
+        //     console.log("===== adding liquidity =====")
+        //     await uniswapInterface.addUniswapLiquidity(
+        //         bornCoin.address,
+        //         geneCoin.address,
+        //         amountA,
+        //         amountB,
+        //         { from: deployer }
+        //     )
+        //     console.log("Liquidity added.")
+        // })
         it("swapTokens function", async function () {
+            let amountA = 1100,
+                amountB = 1100
+            await bornCoin.approve(uniswapInterface.address, amountA)
+            await geneCoin.approve(uniswapInterface.address, amountB)
+
+            //create pair and add liqudity
+
+            await uniswapInterface.addUniswapLiquidity(
+                bornCoin.address,
+                geneCoin.address,
+                amountA,
+                amountB,
+                { from: deployer }
+            )
+
             //Check pair reserves
 
             //await swapInterface.createPair()
+            await swapInterface.setPairAddress(
+                bornCoin.address,
+                geneCoin.address
+            )
             const pairAddress = await swapInterface.PAIRADDRESS()
             console.log(`${pairAddress}`)
 
@@ -47,7 +83,7 @@ describe("Uniswap swap interface functionality", function () {
             //     `${(expectedValueA.toString(), expectedValueB.toString())}`
             // )
 
-            const amountIn = 10
+            const amountIn = 9
             const amountOut = 10
             const balanceGeneCoinBefore = await geneCoin.balanceOf(deployer)
             console.log(
@@ -66,8 +102,16 @@ describe("Uniswap swap interface functionality", function () {
             console.log(
                 `trying to swap ${amountOut.toString()} bornCoin for ${amountIn.toString()} geneCoin`
             )
-            //[(amount1, amount2, amount3, amount4)] =
-            //    await swapInterface.swapTokens(amountIn, amountOut)
+
+            await bornCoin.approve(swapInterface.address, 300)
+            await swapInterface.swapTokens(amountIn, amountOut)
+
+            const balanceAfterBornCoin = await bornCoin.balanceOf(deployer)
+            const balanceAfterGeneCoin = await geneCoin.balanceOf(deployer)
+
+            console.log(
+                `balance of borncoin : ${balanceAfterBornCoin.toString()} \nbalance of genecoin: ${balanceAfterGeneCoin.toString()}`
+            )
         })
     })
 })

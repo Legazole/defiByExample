@@ -32,10 +32,10 @@ describe("UniswapInterface functionality", function () {
                 bornCoin.address,
                 geneCoin.address
             )
-            await uniswapInterface.createUniswapPair(
-                bornCoin.address,
-                geneCoin.address
-            )
+            // await uniswapInterface.createUniswapPair(
+            //     bornCoin.address,
+            //     geneCoin.address
+            // )
             const actualValue = await uniswapInterface.getPairAddress(
                 bornCoin.address,
                 geneCoin.address
@@ -76,39 +76,39 @@ describe("UniswapInterface functionality", function () {
             )
             console.log(`${actualValue.toString()}`)
         })
-        it("addUniswapLiquidity", async function () {
-            let amountA = 1100,
-                amountB = 1100
+        // it("addUniswapLiquidity", async function () {
+        //     let amountA = 1100,
+        //         amountB = 1100
 
-            const pairAddress = await uniswapInterface.getPairAddress(
-                bornCoin.address,
-                geneCoin.address
-            )
+        //     const pairAddress = await uniswapInterface.getPairAddress(
+        //         bornCoin.address,
+        //         geneCoin.address
+        //     )
 
-            await uniswapPairInterface.setPairAddress(pairAddress.toString())
+        //     await uniswapPairInterface.setPairAddress(pairAddress.toString())
 
-            const totalSupplyBefore =
-                await uniswapPairInterface.checkTotalSupply()
-            console.log(
-                `Total supply before adding liquidity: ${totalSupplyBefore.toString()}`
-            )
+        //     const totalSupplyBefore =
+        //         await uniswapPairInterface.checkTotalSupply()
+        //     console.log(
+        //         `Total supply before adding liquidity: ${totalSupplyBefore.toString()}`
+        //     )
 
-            await bornCoin.approve(uniswapInterface.address, amountA)
-            await geneCoin.approve(uniswapInterface.address, amountB)
+        //     await bornCoin.approve(uniswapInterface.address, amountA)
+        //     await geneCoin.approve(uniswapInterface.address, amountB)
 
-            console.log("===== adding liquidity =====")
-            await uniswapInterface.addUniswapLiquidity(
-                bornCoin.address,
-                geneCoin.address,
-                amountA,
-                amountB,
-                { from: deployer }
-            )
-            console.log("Liquidity added.")
+        //     console.log("===== adding liquidity =====")
+        //     await uniswapInterface.addUniswapLiquidity(
+        //         bornCoin.address,
+        //         geneCoin.address,
+        //         amountA,
+        //         amountB,
+        //         { from: deployer }
+        //     )
+        //     console.log("Liquidity added.")
 
-            const totalSupplyAfter =
-                await uniswapPairInterface.checkTotalSupply()
-            console.log(`Total supply after: ${totalSupplyAfter.toString()}`)
-        })
+        //     const totalSupplyAfter =
+        //         await uniswapPairInterface.checkTotalSupply()
+        //     console.log(`Total supply after: ${totalSupplyAfter.toString()}`)
+        // })
     })
 })

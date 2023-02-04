@@ -7,8 +7,8 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
     log("deploying swapInterface on network")
 
     let args = [
-        "0x3e661784267f128e5f706de17fac1fc1c9d56f30",
-        "0x6732128f9cc0c4344b2d4dc6285bcd516b7e59e6",
+        "0x15Ff10fCc8A1a50bFbE07847A22664801eA79E0f",
+        "0xAe9Ed85dE2670e3112590a2BB17b7283ddF44d9c",
     ]
     const uniswapInterface = await deploy("UniswapSwapInterface", {
         from: deployer,

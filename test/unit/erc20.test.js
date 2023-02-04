@@ -14,7 +14,7 @@ describe("ERC20 functionality", function () {
         bornCoin = await ethers.getContract("BornCoin", deployer)
     })
     describe("GeneCoin constructor", async function () {
-        let expectedValue = 1100
+        let expectedValue = 2000
         it("Should check if the msg.sender gets minted tokens", async function () {
             actualValue = await geneCoin.balanceOf(deployer)
             assert.equal(expectedValue.toString(), actualValue.toString())

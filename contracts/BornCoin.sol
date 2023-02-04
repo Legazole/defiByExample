@@ -8,9 +8,9 @@ contract BornCoin is ERC20, Ownable {
     address public owner1 = 0xd66E9945a68Ac737cf506d78372A240862C405Bd;
 
     constructor() ERC20("BornCoin", "BRNC") {
-        _mint(msg.sender, 1100);
-        _mint(owner1, 1100);
-        _mint(address(this), 1100);
+        _mint(msg.sender, 2000);
+        _mint(owner1, 2000);
+        _mint(address(this), 2000);
     }
 
     function mintToAddress(
