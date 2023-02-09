@@ -15,11 +15,14 @@ contract Flashswap is Ownable, IUniswapV2Callee {
         0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D;
     address private constant FACTORY =
         0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f;
+    address private constant SUSHIROUTER =
+        0xd9e1cE17f2641f24aE83637ab66a2cca9C378B9F;
     address private constant WETH = 0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2;
     address public pairAddress;
 
     IUniswapV2Router02 uniRouter = IUniswapV2Router02(ROUTER);
     IUniswapV2Factory uniFactory = IUniswapV2Factory(FACTORY);
+    IUniswapV2Router02 sushiRouter = IUniswapV2Router02(SUSHIROUTER);
     IUniswapV2Pair checkPair;
 
     //we want to borrow an amount from a token address
@@ -71,10 +74,27 @@ contract Flashswap is Ownable, IUniswapV2Callee {
         // ================================
         // : preform the actual arbitrage here. research next.
 
+        /* for this to work we have to trade to another dex, we will use sushiswap as an example
+         */
+        address[] memory path;
+        path = new address[](2);
+        path[0] = WETH;
+        path[1] = _tokenToBorrow;
+
+        uint fee = ((_amountToBorrow * 3) / 977) + 1;
+        uint arbitrageMargin = (((_amountToBorrow * 3) / 977) + 1) + fee;
+        uint amountToRepay = _amountToBorrow + fee;
+
+        sushiRouter.swapTokensForExactTokens(
+            arbitrageMargin,
+            _amountToBorrow,
+            path,
+            address(this),
+            block.timestamp
+        );
+
         // ================================
         //Repay portion of the flash swap.
-        uint fee = ((_amountToBorrow * 3) / 977) + 1;
-        uint amountToRepay = _amountToBorrow + fee;
 
         IERC20(_tokenToBorrow).transfer(_tokenToBorrow, amountToRepay);
     }
