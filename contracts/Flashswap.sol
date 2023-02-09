@@ -49,7 +49,7 @@ contract Flashswap is Ownable, IUniswapV2Callee {
 
         bytes memory data = abi.encode(_amountToBorrow, _tokenToBorrow);
 
-        uniPair.swap(_amount0Out, _amount1Out, msg.sender, data);
+        uniPair.swap(_amount0Out, _amount1Out, address(this), data);
     }
 
     function uniswapV2Call(
@@ -78,6 +78,7 @@ contract Flashswap is Ownable, IUniswapV2Callee {
          */
         address[] memory path;
         path = new address[](2);
+        //first element should be the input token, second element should be the output token
         path[0] = WETH;
         path[1] = _tokenToBorrow;
 
@@ -85,13 +86,13 @@ contract Flashswap is Ownable, IUniswapV2Callee {
         uint arbitrageMargin = (((_amountToBorrow * 3) / 977) + 1) + fee;
         uint amountToRepay = _amountToBorrow + fee;
 
-        sushiRouter.swapTokensForExactTokens(
+        uint amountReceived = sushiRouter.swapTokensForExactTokens(
             arbitrageMargin,
             _amountToBorrow,
             path,
-            address(this),
+            msg.sender,
             block.timestamp
-        );
+        )[1];
 
         // ================================
         //Repay portion of the flash swap.
